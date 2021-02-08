@@ -1,0 +1,27 @@
+{
+  "name": "NoSQL-Workout-Tracker",
+  "version": "1.0.0",
+  "description": "Workout tracker for daily workouts. Built with MongoDB/Mongoose, Node.js, Express.js, and Express Handlebars for the University of Washington Winter 2020/21 Coding Bootcamp",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmkeller/NoSQL-Workout-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tmkeller/NoSQL-Workout-Tracker/issues"
+  },
+  "homepage": "https://github.com/tmkeller/NoSQL-Workout-Tracker#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.0",
+    "mongojs": "^3.1.0",
+    "mongoose": "^5.11.15"
+  }
+}
