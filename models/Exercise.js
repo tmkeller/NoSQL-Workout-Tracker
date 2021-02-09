@@ -2,15 +2,21 @@ const mongoose = require( "mongoose" );
 
 const Schema = mongoose.Schema;
 
+// name, type, weight, sets, reps, and duration
 const ExerciseSchema = new Schema({
     name: {
         type: String,
         trim: true,
         required: true
     },
-    isCardio: Boolean,
+    type: { 
+        type: String,
+        required: true
+    },
     weight: Number,
-    repetitions: Number,
+    sets: Number,
+    reps: Number,
+    duration: Number,
     mileage: Number
 })
 

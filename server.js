@@ -22,10 +22,6 @@ mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost/workouttracker
     useUnifiedTopology: true
 });
 
-// db.on( "error", error => {
-//     console.log( "Database Error: ", error );
-// })
-
 //Sets our app to use the handlebars engine
 app.set("view engine", "handlebars");
 //Sets handlebars configurations (we will go through them later on)
@@ -42,46 +38,53 @@ app.get("/", (req, res) => {
 const seedExercises = [
     {
         name: 'deadlift',
-        isCardio: false,
+        type: 'strength',
         weight: 225,
+        sets: 3,
         repetitions: 10,
+        duration: 5,
         mileage: null
     },
     {
         name: 'bench press',
-        isCardio: false,
+        type: 'strength',
         weight: 165,
-        repetitions: 8,
+        sets: 3,
+        repetitions: 12,
+        duration: 5,
         mileage: null
     },
     {
         name: 'squat',
-        isCardio: false,
-        weight: 120,
-        repetitions: 10,
+        type: 'strength',
+        weight: 180,
+        sets: 3,
+        repetitions: 8,
+        duration: 5,
         mileage: null
     },
     {
         name: 'running',
-        isCardio: true,
+        type: 'cardio',
+        duration: 45,
         mileage: 5
     },
     {
         name: 'rowing',
-        isCardio: true,
-        mileage: 3
+        type: 'cardio',
+        duration: 60,
+        mileage: 2
     },
     {
         name: 'tabata sets',
-        isCardio: true,
-        repetitions: 20
+        type: 'cardio',
+        duration: 20
     }
 ]
 
 app.get( '/seedworkouts', ( req, res ) => {
     db.Exercise.create( seedExercises )
         .then( result => {
-            console.log( "Exercise.create result", result )
             db.Workout.create([
                 {
                     name: 'legs',
@@ -121,11 +124,15 @@ app.get( '/api/workouts', ( req, res ) => {
     })
 })
 
-app.get( "/api/weeks", ( req, res ) => {
-    db.Week.find({})
-    .then( dbWeek => {
-        res.json( dbWeeks );
+app.get( "/api/exercises", ( req, res ) => {
+    db.Exercise.find({})
+    .then( dbExercise => {
+        res.json( dbExercise );
     })
+})
+
+app.get( "/:id", ( req, res ) => {
+    res.render( "404" );
 })
 
 app.listen( PORT, () => {
