@@ -108,12 +108,12 @@ app.get( '/seedworkouts', ( req, res ) => {
                     ]
                 }
             ]).then( fullRes => {
-                res.send( fullRes );
+                res.json( fullRes );
             }).catch( err => {
-                res.send( err );
+                res.json( err );
             })
         }).catch( err => {
-            res.send( err );
+            res.json( err );
         })
 })
 
@@ -128,6 +128,18 @@ app.get( "/api/exercises", ( req, res ) => {
     db.Exercise.find({})
     .then( dbExercise => {
         res.json( dbExercise );
+    })
+})
+
+app.get( "/api/populatedexercises", ( req, res ) => {
+    db.Workout.find({})
+    .populate( 'exercises' )
+    .then( dbWorkout => {
+        res.json( dbWorkout );
+    })
+    .catch( err => {
+        console.log( err );
+        res.json( err );
     })
 })
 
