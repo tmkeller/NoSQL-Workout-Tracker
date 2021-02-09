@@ -1,1 +1,43 @@
-<h1>Oh look it works!</h1>
+<div class="container main_container">
+    <div class="row">
+        <div class="col s12 welcome center">
+            <h1>Welcome!</h1>
+        </div>
+        <div class="col s12 center">
+            <button data-target="modal1" class="waves-effect waves-light btn-large red modal-trigger" id="add_new_workout">Add New Workout</button>
+            <button data-target="modal2" class="waves-effect waves-light btn-large red modal-trigger" id="continue_workout">Continue Workout</button>
+        </div>
+    </div>
+
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col s0 m3 l4"></div>
+        <div class="col s12 m6 l4">
+            <form id="workout_form">
+                <input placeholder="Name" id="workout_name" type="text" class="workout_form">
+                <button class="waves-effect waves-light btn-large red" id="submit_workout">Submit</button>
+            </form>
+        </div>
+        <div class="col s0 m3 l4"></div>
+    </div>
+</div>
