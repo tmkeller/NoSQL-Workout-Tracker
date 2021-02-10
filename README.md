@@ -25,6 +25,8 @@ Clone the git into your directory of choice. Type npm i to install all dependenc
 ## Usage
 Use npm start, node server.js, or nodemon server.js from the home directory, depending on whether you are running the app remotely, from locally, or for development, respectively. For localhost, the app is coded to run on port 8080. Navigate to localhost:8080/seedworkouts to seed the site with example workouts, or begin creating your own. Press the big red button on the left to create a new workout. From there, you'll be able to add new exercises using the form (which should immediately populate in the area below), or delete your workout to start over. The MongoDB schema will save your exercises and workouts, so you're free to add to them and persue them at your leisure.
 
+[Live site demo](https://tmk-nosql-workout-tracker.herokuapp.com/)
+
 ![Screenshot](./assets/screenshot.png)
 
 ![Demo](./assets/demo.gif)
