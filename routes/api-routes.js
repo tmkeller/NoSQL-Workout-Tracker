@@ -9,15 +9,44 @@ module.exports = function (app) {
         })
     })
 
+    app.get( "/api/workouts/:id", ( req, res ) => {
+        db.Workout.findOne({ _id: req.params.id })
+        .then ( dbWorkout => {
+            res.json( dbWorkout );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
+        })
+    })
+
     app.get( "/api/exercises", ( req, res ) => {
         db.Exercise.find({})
-        .then( dbExercise => {
+        .then( dbExercises => {
+            res.json( dbExercises );
+        })
+    })
+
+    app.get( "/api/exercises/:id", ( req, res ) => {
+        db.Exercise.findOne({ _id: req.params.id })
+        .then ( dbExercise => {
             res.json( dbExercise );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
         })
     })
 
     app.post( "/api/workouts", ( req, res ) => {
-        db.Workout.create( req.body )
+        console.log( req.body );
+        db.Workout.create( req.body ).then( data => {
+            res.json( data );
+        }).catch( err => {
+            res.json( err );
+        });
+    })
+
+    app.post( "/api/exercises", ( req, res ) => {
+        db.Exercise.create( req.body );
     })
 
     app.get( "/api/populatedexercises", ( req, res ) => {

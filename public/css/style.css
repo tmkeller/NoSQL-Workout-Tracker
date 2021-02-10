@@ -8,6 +8,17 @@ main {
     flex: 1 0 auto;
 }
 
+h3.workout_header {
+    margin-top: 0px;
+    float: left;
+    display: inline-block;
+}
+
+button#delete_workout {
+    margin-top: 8px;
+    margin-left: 18px;
+}
+
 #workout_form {
     display: none;
     width: 100%;
