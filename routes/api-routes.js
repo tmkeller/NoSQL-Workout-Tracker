@@ -52,6 +52,24 @@ module.exports = function (app) {
         })
     })
 
+    app.post( "/api/exercises", ( req, res ) => {
+        console.log( req.body );
+        db.Exercise.create( req.body )
+        .then( dbExercise => {
+
+            db.Workout.findOneAndUpdate({ _id: req.body.workoutId }, {$push: { exercises: dbExercise._id }})
+            .catch( err => {
+                console.log( err );
+                res.json( err );
+            })
+
+            res.json( dbExercise );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
+        })
+    })
+
     app.delete( "/api/exercises/:id", ( req, res ) => {
         db.Exercise.findOneAndDelete({ _id: req.params.id })
         .then( dbExercise => {

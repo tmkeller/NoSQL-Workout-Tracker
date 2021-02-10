@@ -19,7 +19,12 @@ button#delete_workout {
     margin-left: 18px;
 }
 
-#workouts_select {
+button#exercise_submit {
+    display: block;
+    margin: 0 auto;
+}
+
+#workouts_select, #exercise_type {
     display: block;
 }
 
