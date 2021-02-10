@@ -11,11 +11,21 @@
 
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
+            <h4>Add New Workout</h4>
+            <form>
+                <input type="text" id="submit_workout_name">
+                {{#each exercises}}
+                    <p>
+                    <label>
+                        <input type="checkbox" class="submit_workout_checkbox" data-id="{{ _id }}" />
+                        <span>{{ name }}</span>
+                    </label>
+                    </p>
+                {{/each}}
+            </form>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+            <button class="waves-effect waves-light btn red" id="submit_add_new">Submit</button>
         </div>
     </div>
 
@@ -25,19 +35,18 @@
             <p>A bunch of text</p>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+            <button class="waves-effect waves-light btn red modal-close" id="submit_continue">Submit</button>
         </div>
     </div>
 
+    <hr>
 
-    <div class="row">
-        <div class="col s0 m3 l4"></div>
-        <div class="col s12 m6 l4">
-            <form id="workout_form">
-                <input placeholder="Name" id="workout_name" type="text" class="workout_form">
-                <button class="waves-effect waves-light btn-large red" id="submit_workout">Submit</button>
-            </form>
+    {{!-- <div class="row">
+        <div class="col s0 m2 l3"></div>
+        <div class="col s12 m8 l6">
+            <h3 class="workout_header">workout name</h3>
+            <button class="waves-effect waves-light btn red modal-close" id="delete_workout">Delete</button>
         </div>
-        <div class="col s0 m3 l4"></div>
-    </div>
+        <div class="col s0 m2 l3"></div>
+    </div> --}}
 </div>
