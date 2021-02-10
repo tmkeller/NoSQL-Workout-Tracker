@@ -6,6 +6,9 @@ module.exports = function (app) {
         db.Workout.find({})
         .then( dbWorkouts => {
             res.json( dbWorkouts );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
         })
     })
 
@@ -23,6 +26,9 @@ module.exports = function (app) {
         db.Exercise.find({})
         .then( dbExercises => {
             res.json( dbExercises );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
         })
     })
 
@@ -41,12 +47,17 @@ module.exports = function (app) {
         db.Workout.create( req.body ).then( data => {
             res.json( data );
         }).catch( err => {
+            console.log( err );
             res.json( err );
         });
     })
 
     app.post( "/api/exercises", ( req, res ) => {
-        db.Exercise.create( req.body );
+        db.Exercise.create( req.body )
+        .catch( err => {
+            console.log( err );
+            res.json( err );
+        });
     })
 
     app.get( "/api/populatedexercises", ( req, res ) => {

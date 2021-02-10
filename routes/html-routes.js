@@ -7,6 +7,8 @@ module.exports = function (app) {
         const exercises = await db.Exercise.find({}).lean()
         .then( dbExercise => {
             return dbExercise;
+        }).catch( err => {
+            console.log( err );
         })
         const hbsObj = {
             exercises
