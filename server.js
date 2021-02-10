@@ -18,8 +18,9 @@ const db = require( "./models" );
 
 mongoose.connect( process.env.MONGODB_URI || 'mongodb://localhost/workouttracker', {
     useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
 });
 
 //Sets our app to use the handlebars engine
