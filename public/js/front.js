@@ -1,9 +1,51 @@
 $(document).ready(function(){
     $('.modal').modal();
 
-    $("#submit_add_new").on("click", async function() {
-        // Call get() on all checked exercise elements to turn them into a true array.
-        $( "#workout_row" ).remove();
+    $( "#continue_workout" ).on( "click", function() {
+        $.get( "/api/workouts", function( result ) {
+            // Append a new <option> tag to #workouts_select for every workout you retrieve.
+            if ( !result ) {
+                let option = $( '<option>', { text: "No workouts yet! Create a new one." } ).attr( "disabled", true );
+                $( "#workouts_select" ).append( option );
+            }
+            for ( let i = 0; i < result.length; i++ ) {
+                let option = $( '<option>', { 
+                    class: "modify_existing_option",
+                    value: result[ i ]._id
+                }).text( result[ i ].name ).attr( "data-id", result[ i ]._id );
+                $( "#workouts_select" ).append( option );
+            }
+        })
+    })
+
+    $( "#submit_modify_existing" ).on("click", function() {
+        $( ".workout_row" ).remove();
+        $( ".exercise_row" ).remove();
+        let id = $( "#workouts_select" ).val();
+        $.get( "/api/populatedexercises/" + id )
+        .then( populatedData => {
+            $( '.modal' ).modal( 'close', "#modal1" );
+
+            // Render the row where title elements will appear.
+            const newRow = renderTitleRow( populatedData );
+
+            $( "#divider" ).after( newRow );
+
+            const exrcsRow = $( "<div>", { class: "row exercise_row" });
+
+            newRow.after( exrcsRow );
+
+            // Add the event listener for the delete workout button.
+            addDeleteWorkout();
+
+            renderExerciseCards( populatedData, exrcsRow );
+        })
+    });
+
+    $("#submit_add_new").on("click", function() {
+        $( ".workout_row" ).remove();
+        $( ".exercise_row" ).remove();
+        // GET all 
         const exercises = $( "input:checkbox:checked.submit_workout_checkbox" )
             .map( function() {
                 return $( this ).data( "id" );
@@ -20,80 +62,108 @@ $(document).ready(function(){
         .then( function( workoutData ) {
             $( '.modal' ).modal( 'close', "#modal1" );
 
-            // Create a new row with cards for each exercise.
-            const newRow = $( "<div>", { class: "row workout_row" });
-            const leftCol = $( "<div>", { class: "col s0 m2 l3" });
-            const rightCol = $( "<div>", { class: "col s0 m2 l3" } );
-            const centerCol = $( "<div>", { class: "col s12 m8 l6" } );
-            const workoutHeader = $( "<h3>", { class: "workout_header" }).text( workoutData.name );
-            const deleteButton = $( "<button>", { class: "waves-effect waves-light btn red modal-close", id: "delete_workout" }).text( "Delete" );
-
-            newRow.append( leftCol );
-            newRow.append( centerCol );
-            newRow.append( rightCol );
-            centerCol.append( workoutHeader );
-            centerCol.append( deleteButton );
-
+            // Render the row where title elements will appear.
+            const newRow = renderTitleRow( workoutData );
             $( "#divider" ).after( newRow );
 
             const exrcsRow = $( "<div>", { class: "row exercise_row" });
 
             newRow.after( exrcsRow );
-            console.log( "Workout data._id", workoutData._id )
+
+            // Add the event listener for the delete workout button.
+            addDeleteWorkout();
+
             $.get( "/api/populatedexercises/" + workoutData._id )
             .then( function( populatedData ) {
-                console.log( populatedData.exercises );
-                for ( let i = 0; i < populatedData.exercises.length; i++ ) {
-                    let newExrcs = populatedData.exercises[ i ];
 
-                    const column = $( "<div>", { class: "col s12 m6 l3" }).attr( "data-id", newExrcs._id );
-                    const card = $( "<div>", { class: "card blue-grey darken-1" });
-                    const cardContent = $( "<div>", { class: "card-content white-text" });
-                    const titleSpan = $( "<span>", { class: "card-title" }).text( newExrcs.name );
-                    const typeSpan = $( "<span>", { class: "card_type" }).text( "Type: " + newExrcs.type );
+                renderExerciseCards( populatedData, exrcsRow );
 
-                    let textContent = "";
-                    if ( newExrcs.weight ) {
-                        textContent += "Weight: " + newExrcs.weight + "\n";
-                    }
-                    if ( newExrcs.sets ) {
-                        textContent += "Sets: " + newExrcs.sets + "\n";
-                    }
-                    if ( newExrcs.reps ) {
-                        textContent += "Reps: " + newExrcs.reps + "\n";
-                    }
-                    if ( newExrcs.duration ) {
-                        textContent += "Duration: " + newExrcs.duration + "\n";
-                    }
-                    if ( newExrcs.mileage ) {
-                        textContent += "Mileage: " + newExrcs.mileage + "\n";
-                    }
-
-                    const paragraph = $( "<p>", { class: "card_paragraph" }).text( textContent );
-                    const cardAction = $( "<div>", { class: "card-action" });
-                    const exrcsDelButton = $( "<button>", { class: "waves-effect waves-light btn green", id: "delete_exrcs_card"}).text( "Remove" );
-
-                    exrcsRow.append( column );
-                    column.append( card );
-                    card.append( cardContent );
-                    card.append( cardAction );
-                    cardContent.append( titleSpan );
-                    cardContent.append( typeSpan );
-                    cardContent.append( paragraph );
-                    cardAction.append( exrcsDelButton );
-                }
             })
         });
-
-        // <div class="row">
-        //     <div class="col s0 m2 l3"></div>
-        //     <div class="col s12 m8 l6">
-        //         <h3 class="workout_header">workout name</h3>
-        //         <button class="waves-effect waves-light btn red modal-close" id="delete_workout">Delete</button>
-        //     </div>
-        //     <div class="col s0 m2 l3"></div>
-        // </div>
-        
-        return false;
     });
+
+    function addDeleteWorkout() {
+        $( "#delete_workout" ).on( "click", function() {
+
+            let id = $( this ).attr( "data-id" );
+            console.log( id );
+            
+            $.ajax({
+                url: '/api/workouts/' + id,
+                type: 'DELETE'
+            }).then( ( req, res ) => {
+                console.log( res );
+                window.location.href=window.location.href;
+            }).catch( err => {
+                console.log( err );
+                res.json( err );
+            });
+        })
+    }
+
+    function renderTitleRow( populatedData ) {
+        // Create a new row with cards for each exercise.
+        const newRow = $( "<div>", { class: "row workout_row" });
+        const leftCol = $( "<div>", { class: "col s0 m2 l3" });
+        const rightCol = $( "<div>", { class: "col s0 m2 l3" } );
+        const centerCol = $( "<div>", { class: "col s12 m8 l6" } );
+        const workoutHeader = $( "<h3>", { class: "workout_header" }).text( populatedData.name );
+        const deleteButton = $( "<button>", { 
+            class: "waves-effect waves-light btn red modal-close", 
+            id: "delete_workout" }).text( "Delete" ).attr( "data-id", populatedData._id );
+
+        newRow.append( leftCol );
+        newRow.append( centerCol );
+        newRow.append( rightCol );
+        centerCol.append( workoutHeader );
+        centerCol.append( deleteButton );
+
+        return newRow
+    }
+
+    function renderExerciseCards( populatedData, exrcsRow ) {
+
+        for ( let i = 0; i < populatedData.exercises.length; i++ ) {
+            let newExrcs = populatedData.exercises[ i ];
+
+            const column = $( "<div>", { class: "col s12 m6 l3", id: newExrcs._id });
+            const card = $( "<div>", { class: "card blue-grey darken-1" });
+            const cardContent = $( "<div>", { class: "card-content white-text" });
+            const titleSpan = $( "<span>", { class: "card-title" }).text( newExrcs.name );
+            const typeSpan = $( "<span>", { class: "card_type" }).text( "Type: " + newExrcs.type );
+
+            let textContent = "";
+            if ( newExrcs.weight ) {
+                textContent += "Weight: " + newExrcs.weight + ",\n";
+            }
+            if ( newExrcs.sets ) {
+                textContent += "Sets: " + newExrcs.sets + ",\n";
+            }
+            if ( newExrcs.reps ) {
+                textContent += "Reps: " + newExrcs.reps + ",\n";
+            }
+            if ( newExrcs.duration ) {
+                textContent += "Duration: " + newExrcs.duration + ",\n";
+            }
+            if ( newExrcs.mileage ) {
+                textContent += "Mileage: " + newExrcs.mileage + ",\n";
+            }
+
+            const paragraph = $( "<p>", { class: "card_paragraph" }).text( textContent );
+            const cardAction = $( "<div>", { class: "card-action" });
+            const exrcsDelButton = $( "<button>", { 
+                class: "waves-effect waves-light btn green delete_exercise_button"
+                
+            }).text( "Remove" ).attr( "data-id", newExrcs._id ).attr( "data-parent", populatedData._id );
+
+            exrcsRow.append( column );
+            column.append( card );
+            card.append( cardContent );
+            card.append( cardAction );
+            cardContent.append( titleSpan );
+            cardContent.append( typeSpan );
+            cardContent.append( paragraph );
+        }
+    }
+
 });

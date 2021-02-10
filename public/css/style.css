@@ -19,6 +19,10 @@ button#delete_workout {
     margin-left: 18px;
 }
 
+#workouts_select {
+    display: block;
+}
+
 p.modal1_checkbox {
     margin: 2px;
 }

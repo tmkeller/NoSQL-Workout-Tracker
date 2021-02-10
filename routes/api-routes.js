@@ -14,7 +14,17 @@ module.exports = function (app) {
 
     app.get( "/api/workouts/:id", ( req, res ) => {
         db.Workout.findOne({ _id: req.params.id })
-        .then ( dbWorkout => {
+        .then( dbWorkout => {
+            res.json( dbWorkout );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
+        })
+    })
+
+    app.delete( "/api/workouts/:id", ( req, res ) => {
+        db.Workout.findOneAndDelete({ _id: req.params.id })
+        .then( dbWorkout => {
             res.json( dbWorkout );
         }).catch( err => {
             console.log( err );
@@ -35,6 +45,16 @@ module.exports = function (app) {
     app.get( "/api/exercises/:id", ( req, res ) => {
         db.Exercise.findOne({ _id: req.params.id })
         .then ( dbExercise => {
+            res.json( dbExercise );
+        }).catch( err => {
+            console.log( err );
+            res.json( err );
+        })
+    })
+
+    app.delete( "/api/exercises/:id", ( req, res ) => {
+        db.Exercise.findOneAndDelete({ _id: req.params.id })
+        .then( dbExercise => {
             res.json( dbExercise );
         }).catch( err => {
             console.log( err );
