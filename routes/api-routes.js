@@ -50,9 +50,23 @@ module.exports = function (app) {
     })
 
     app.get( "/api/populatedexercises", ( req, res ) => {
-        db.Workout.find({})
+        db.Workout.find( req.body )
         .populate( 'exercises' )
         .then( dbWorkout => {
+            console.log( "req.body", req.body );
+            res.json( dbWorkout );
+        })
+        .catch( err => {
+            console.log( err );
+            res.json( err );
+        })
+    })
+
+    app.get( "/api/populatedexercises/:id", ( req, res ) => {
+        db.Workout.findOne({ _id: req.params.id })
+        .populate( 'exercises' )
+        .then( dbWorkout => {
+            console.log( "req.body", req.body );
             res.json( dbWorkout );
         })
         .catch( err => {
@@ -68,7 +82,7 @@ module.exports = function (app) {
             type: 'strength',
             weight: 225,
             sets: 3,
-            repetitions: 10,
+            reps: 10,
             duration: 5,
             mileage: null
         },
@@ -77,7 +91,7 @@ module.exports = function (app) {
             type: 'strength',
             weight: 165,
             sets: 3,
-            repetitions: 12,
+            reps: 12,
             duration: 5,
             mileage: null
         },
@@ -86,7 +100,7 @@ module.exports = function (app) {
             type: 'strength',
             weight: 180,
             sets: 3,
-            repetitions: 8,
+            reps: 8,
             duration: 5,
             mileage: null
         },

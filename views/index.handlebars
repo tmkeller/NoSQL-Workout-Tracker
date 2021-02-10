@@ -11,11 +11,11 @@
 
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h4>Add New Workout</h4>
+            <h4 class="modal1_header">Add New Workout</h4>
             <form>
-                <input type="text" id="submit_workout_name">
+                <input placeholder="Workout name" type="text" id="submit_workout_name">
                 {{#each exercises}}
-                    <p>
+                    <p class="modal1_checkbox">
                     <label>
                         <input type="checkbox" class="submit_workout_checkbox" data-id="{{ _id }}" />
                         <span>{{ name }}</span>
@@ -39,7 +39,7 @@
         </div>
     </div>
 
-    <hr>
+    <hr id="divider">
 
     {{!-- <div class="row">
         <div class="col s0 m2 l3"></div>
